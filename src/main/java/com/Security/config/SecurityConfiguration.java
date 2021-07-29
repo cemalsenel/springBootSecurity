@@ -60,15 +60,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 anyRequest(). //tüm istekleri denetlea
                 authenticated().//şifreli olarak kullan
                 and(). //farklı işlemleri birleştirebilmek için
+                httpBasic().and().//basic http kimlik denetimini kullan
                 formLogin(). //form login sayfası olarak giriş yapılsın
 
-
-                // === kendi login sayfamızı kullanmak için======
+                //kendi login sayfamızı kullanmak için
                 // 1- Webapp klasöründe yeni login.html sayfası oluşturlur.
                 //  2- HomeController içerisinde bir RequestMapping metodu ile path tanımlanır
                 //  3- SecurityConfig içerisinde loginPage(/login) metodu ile aktif hale getirilir.
-                and().
-                httpBasic();//basic http kimlik denetimini kullan
+                loginPage("/login").permitAll().
+                defaultSuccessUrl("/success").
+                and().logout().//logout olunca şifre vb. bilgileri sil
+                clearAuthentication(true).//şifrelemeleri sil
+                invalidateHttpSession(true).//http oturumunu bitir
+                deleteCookies("JESSIONID").//session id'yi sil
+                logoutSuccessUrl("/login");//logout sonrasında tekrardan login'e yönlendirir
+
     }
 
     @Override

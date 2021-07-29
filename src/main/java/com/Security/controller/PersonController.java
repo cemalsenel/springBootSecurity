@@ -59,7 +59,13 @@ public class PersonController {
 	public String deletePeopleById(@PathVariable Integer id) {
 		return peopleService.deletePeopleById(id);
 	}
-	
+
+	@DeleteMapping(path="/deleteAll")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	public String deleteAllPeople() {
+		return peopleService.deleteAllPeople();
+	}
+
 	@PutMapping(path="/update/{id}")
 	@PreAuthorize("hasAuthority('admin:write')")
 	public Person updatePeopleById(@PathVariable Integer id, @RequestBody Person newPerson) {

@@ -46,6 +46,16 @@ public class PeopleService {
 		personRepository.deleteById(id);
 		return "Person was deleted whose id is : "+id;
 	}
+
+	//delete all
+	public String deleteAllPeople(){
+		if(personRepository.count() == 0){
+			return "There is no data in database";
+		}else {
+			personRepository.deleteAll();
+			return "All people were deleted";
+		}
+	}
 	
 	//update
 	public Person updatePeopleById(Integer id,@RequestBody Person updatedPerson) {
