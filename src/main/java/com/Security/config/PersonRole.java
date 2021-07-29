@@ -23,13 +23,17 @@ public enum PersonRole {
         this.personPermission = personPermission;
     }
 
+    // method-based authenteication işlemi için rolebirleştirme metodu
     public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
+        // Kisi'nin  izinlerinleri alıp SimpleGrantedAuthority class'ına çevirerek permission adında bir Set'e kaydettik.
+        Set<SimpleGrantedAuthority> permission = getPersonPermission().stream()
+                .map(per -> new SimpleGrantedAuthority(per.getPermission())).collect(Collectors.toSet());
 
-        Set<SimpleGrantedAuthority> personPermission = getPersonPermission().stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getPermission())).collect(Collectors.toSet());
+        // permission Set'i içerisindeki iznileri "ROLE_" sabit kelimesi ile birleştirir.
+        permission.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
 
-        personPermission.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
-
-        return personPermission;
+        return permission;
     }
+
+
 }
