@@ -34,6 +34,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 authorizeRequests().//istekleri denetle
                 antMatchers("/","index","/css/*","/js/*"). //bu uzantılara ve anasayfaya şifresiz girişe izin ver
                 permitAll().
+
+                //===============ROLE-BASED Authentication
+                antMatchers("/people").hasRole(PersonRole.USER.name()). //USER rolüne sahip kullanıcının erişebileceği path'in tanımlanması
+                antMatchers("/people/**").hasRole(PersonRole.ADMIN.name()).//ADMIN rolüne sahip kullanıcının erişebileceği path'in tanımlanması
                 anyRequest(). //tüm istekleri denetlea
                 authenticated().//şifreli olarak kullan
                 and(). //farklı işlemleri birleştirebilmek için
@@ -45,9 +49,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails user1 = User.builder().username("user").password(passwordEncoder.encode("12345")).roles("USER").build();
+        UserDetails user1 = User
+                .builder()
+                .username("user")
+                .password(passwordEncoder.encode("12345"))
+                //.roles("USER")
+                //.build();
+                .authorities(PersonRole.USER.getGrantedAuthorities())
+                .build();
 
-        UserDetails admin1 = User.builder().username("admin").password(passwordEncoder.encode("123456")).roles("ADMIN").build();
+        UserDetails admin1 = User
+                .builder()
+                .username("admin")
+                .password(passwordEncoder.encode("123456"))
+                //.roles("ADMIN")
+                //.build();
+                .authorities(PersonRole.USER.getGrantedAuthorities())
+                .build();
 
         return new InMemoryUserDetailsManager(user1, admin1);
     }
