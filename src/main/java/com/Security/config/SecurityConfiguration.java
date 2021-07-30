@@ -72,7 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 and().logout().//logout olunca şifre vb. bilgileri sil
                 clearAuthentication(true).//şifrelemeleri sil
                 invalidateHttpSession(true).//http oturumunu bitir
-                deleteCookies("JESSIONID").//session id'yi sil
+                deleteCookies("JSESSIONID").//session id'yi sil
                 logoutSuccessUrl("/login");//logout sonrasında tekrardan login'e yönlendirir
 
     }
